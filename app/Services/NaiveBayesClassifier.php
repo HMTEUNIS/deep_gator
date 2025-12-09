@@ -26,6 +26,39 @@ class NaiveBayesClassifier
         if (File::exists($this->brainPath)) {
             $content = File::get($this->brainPath);
             $this->brain = json_decode($content, true) ?? [];
+            
+            // Fix brain if it has vocabulary_size instead of vocabulary
+            if (isset($this->brain['vocabulary_size']) && !isset($this->brain['vocabulary'])) {
+                // Rebuild vocabulary from word_counts
+                $this->brain['vocabulary'] = [];
+                if (isset($this->brain['word_counts'])) {
+                    foreach ($this->brain['word_counts'] as $classification => $wordCounts) {
+                        if (is_array($wordCounts)) {
+                            foreach (array_keys($wordCounts) as $word) {
+                                if (!in_array($word, $this->brain['vocabulary'])) {
+                                    $this->brain['vocabulary'][] = $word;
+                                }
+                            }
+                        }
+                    }
+                }
+                $this->brain['vocabulary'] = array_values(array_unique($this->brain['vocabulary']));
+                sort($this->brain['vocabulary']);
+                unset($this->brain['vocabulary_size']);
+                $this->saveBrain();
+            }
+            
+            // Ensure vocabulary exists even if empty
+            if (!isset($this->brain['vocabulary'])) {
+                $this->brain['vocabulary'] = [];
+            }
+            
+            // Fix category_counts to class_counts if needed
+            if (isset($this->brain['category_counts']) && !isset($this->brain['class_counts'])) {
+                $this->brain['class_counts'] = $this->brain['category_counts'];
+                unset($this->brain['category_counts']);
+                $this->saveBrain();
+            }
         } else {
             // Check for initial training data
             $initialTrainingPath = storage_path('app/initial_training.json');
