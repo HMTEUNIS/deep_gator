@@ -4,7 +4,10 @@
 <div class="px-4 py-6 sm:px-0">
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Newsfeed Aggregator</h1>
-        <p class="text-gray-600 dark:text-gray-400">Stay informed about Climate Change, Economic Justice, Reproductive Rights, LGBTQIA+, and Immigration issues</p>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Stay informed about Climate Change, Economic Justice, Reproductive Rights, LGBTQIA+, and Immigration issues</p>
+        <p class="text-gray-500 dark:text-gray-500 text-sm">
+            We aggregate news from {{ count(config('newsfeed.rss_feeds')) }} trusted RSS feeds to bring you a comprehensive understanding of the issues that matter most. Our AI-powered classifier automatically categorizes articles, helping you stay informed with a curated view of the latest developments across these critical topics.
+        </p>
     </div>
 
     <!-- Tabs -->
@@ -81,7 +84,7 @@
         </div>
     @else
         <!-- Overview/Landing Page -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
             @foreach(['Climate Change', 'Economic Justice', 'Reproductive Rights', 'LGBTQIA+', 'Immigration'] as $classification)
             <a href="{{ route('articles.index', ['classification' => $classification]) }}" 
                class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
@@ -92,6 +95,75 @@
                 <span class="text-blue-600 dark:text-blue-400 text-sm font-medium">View articles →</span>
             </a>
             @endforeach
+        </div>
+
+        <!-- How It Works Flow Diagram -->
+        <div class="mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">How It Works</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-2">
+                    <!-- Step 1: RSS Feeds -->
+                    <div class="flex flex-col items-center text-center flex-1">
+                        <div class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-6 w-full max-w-xs mb-4">
+                            <div class="text-3xl mb-2">📡</div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">RSS Feeds</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ count(config('newsfeed.rss_feeds')) }} Trusted Sources</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-gray-400 dark:text-gray-500 text-2xl">→</div>
+                    <div class="md:hidden text-gray-400 dark:text-gray-500 text-2xl">↓</div>
+
+                    <!-- Step 2: Fetch & Parse -->
+                    <div class="flex flex-col items-center text-center flex-1">
+                        <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-6 w-full max-w-xs mb-4">
+                            <div class="text-3xl mb-2">🔄</div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Fetch & Parse</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Extract Articles Automatically</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-gray-400 dark:text-gray-500 text-2xl">→</div>
+                    <div class="md:hidden text-gray-400 dark:text-gray-500 text-2xl">↓</div>
+
+                    <!-- Step 3: AI Classification -->
+                    <div class="flex flex-col items-center text-center flex-1">
+                        <div class="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-6 w-full max-w-xs mb-4">
+                            <div class="text-3xl mb-2">🤖</div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Algorithmic Classification</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Naive Bayes Classifier</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-gray-400 dark:text-gray-500 text-2xl">→</div>
+                    <div class="md:hidden text-gray-400 dark:text-gray-500 text-2xl">↓</div>
+
+                    <!-- Step 4: Database -->
+                    <div class="flex flex-col items-center text-center flex-1">
+                        <div class="bg-yellow-100 dark:bg-yellow-900/30 rounded-lg p-6 w-full max-w-xs mb-4">
+                            <div class="text-3xl mb-2">💾</div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Store</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Database Storage (48hr retention)</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="hidden md:block text-gray-400 dark:text-gray-500 text-2xl">→</div>
+                    <div class="md:hidden text-gray-400 dark:text-gray-500 text-2xl">↓</div>
+
+                    <!-- Step 5: Display -->
+                    <div class="flex flex-col items-center text-center flex-1">
+                        <div class="bg-indigo-100 dark:bg-indigo-900/30 rounded-lg p-6 w-full max-w-xs mb-4">
+                            <div class="text-3xl mb-2">📰</div>
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Display</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Curated News Feed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 </div>
